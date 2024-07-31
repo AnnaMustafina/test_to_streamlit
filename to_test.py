@@ -1,6 +1,12 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from id_list import id_now
+
+if id_now ='IU13488':
+    st.write('Привет, пользователь', id_now)
+else:
+    st.write('Привет, таинственный незнакомец')
 
 chart_data = pd.DataFrame(
     {
