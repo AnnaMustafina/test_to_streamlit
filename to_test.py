@@ -7,19 +7,20 @@ import requests
 bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
 webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
 
-# Получите данные от Telegram
-def get_data_from_telegram(data):
-    # Извлеките Telegram ID из данных
-    user_id = data.get("message", {}).get("from", {}).get("id")
-    st.write(f"Получен Telegram ID: {user_id}")
-# Обработка webhook
-if st.button("Получить данные из Telegram"):
-    response = requests.get(webhook_url)
-    if response.status_code == 200:
-        data = response.json()
-        get_data_from_telegram(data)
-    else:
-        st.error("Ошибка получения данных")
+# Получение данных о Telegram ID
+   def get_last_user_id():
+       response = requests.get('http://YOUR_STREAMLIT_APP_URL/last_user_id')
+       if response.status_code == 200:
+           return response.json()['user_id']
+       else:
+           return None
+
+   last_user_id = get_last_user_id()
+
+   if last_user_id:
+       st.write("Последний Telegram ID: " + str(last_user_id))
+   else:
+       st.write("Нет данных о Telegram ID")
   
 #if id_now =='IU13488':
 #    st.write('Привет, пользователь', id_now)
