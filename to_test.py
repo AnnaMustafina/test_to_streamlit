@@ -8,31 +8,31 @@ bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
 webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
 
 # Функция для обновления Telegram ID
-def update_telegram_id(telegram_id):
-    st.session_state.last_telegram_id = telegram_id
+#def update_telegram_id(telegram_id):
+#    st.session_state.last_telegram_id = telegram_id
 
 # Обработка POST запроса от бота
-def handle_api_request():
-    if st.session_state.last_telegram_id:
-        st.write(f"Последний Telegram ID: {st.session_state.last_telegram_id}")
-    else:
-        st.write("Еще не было запросов от бота.")
+#def handle_api_request():
+#    if st.session_state.last_telegram_id:
+#        st.write(f"Последний Telegram ID: {st.session_state.last_telegram_id}")
+#    else:
+#        st.write("Еще не было запросов от бота.")
 
 # Основная часть приложения
-st.title("Приложение Streamlit")
-st.write("Ожидание запроса от бота...")
+#st.title("Приложение Streamlit")
+#st.write("Ожидание запроса от бота...")
 
 # Функция для обработки API запросов
-@st.experimental_singleton
-def api_handler():
-    data = st.experimental_get_query_params()
-    if 'telegram_id' in data:
-        telegram_id = data['telegram_id'][0]
-        update_telegram_id(telegram_id)
+#@st.experimental_singleton
+#def api_handler():
+#    data = st.experimental_get_query_params()
+#    if 'telegram_id' in data:
+#        telegram_id = data['telegram_id'][0]
+#        update_telegram_id(telegram_id)
 
 # Вызов функции API точки
-api_handler()
-handle_api_request()
+#api_handler()
+#handle_api_request()
 
 
 #if id_now =='IU13488':
