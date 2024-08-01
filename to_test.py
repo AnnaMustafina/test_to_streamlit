@@ -1,12 +1,5 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-#from id_list import id_now
 from flask import Flask, request
-import threading
-
-bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
-webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
 
 app = Flask(__name__)
 
@@ -21,11 +14,13 @@ def webhook():
         telegram_id = data['message']['from']['id']
     return '', 200
 
-def run_flask():
-    app.run(port=5000)
-
-# Запуск Flask в отдельном потоке
-threading.Thread(target=run_flask).start()
+@app.route('/update_telegram_id', methods=['POST'])
+def update_telegram_id():
+    global telegram_id
+    data = request.json
+    telegram_id = data['telegram_id']
+    print(f"Received Telegram ID: {telegram_id}")
+    return '', 200
 
 # Streamlit интерфейс
 st.title("Telegram ID Display")
@@ -34,11 +29,12 @@ if telegram_id:
 else:
     st.write("Ожидание сообщения от Telegram...")
 
+#bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
+#webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
 
-#if id_now =='IU13488':
-#    st.write('Привет, пользователь', id_now)
-#else:
-#    st.write('Привет, таинственный незнакомец')
+
+
+
 
 chart_data = pd.DataFrame(
     {
