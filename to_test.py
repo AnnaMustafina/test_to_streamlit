@@ -18,15 +18,24 @@ def handle_api_request():
     else:
         st.write("Еще не было запросов от бота.")
 
-# Создание API точки для обновления Telegram ID
-@st.experimental_api(show_spinner=False)
-def api_update_telegram_id():
+# Основная часть приложения
+st.title("Приложение Streamlit")
+st.write("Ожидание запроса от бота...")
+
+# Функция для обработки API запросов
+def api_handler():
     data = st.experimental_get_query_params()
     if 'telegram_id' in data:
         telegram_id = data['telegram_id'][0]
-        update_telegram_id(telegram_id)
+        api_update_telegram_id(telegram_id)
 
-api_update_telegram_id()
+# Обработка API запросов с помощью декоратора
+@st.experimental_api(show_spinner=False)
+def api_update_telegram_id(telegram_id):
+    update_telegram_id(telegram_id)
+
+# Вызов функции API точки
+api_handler()
 handle_api_request()
 
 
