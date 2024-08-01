@@ -1,29 +1,38 @@
 import streamlit as st
-from flask import Flask, request
-
-app = Flask(__name__)
+import requests
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
+import json
 
 # Хранение Telegram ID
 telegram_id = None
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    global telegram_id
-    data = request.json
-    if 'message' in data:
-        telegram_id = data['message']['from']['id']
-    return '', 200
+class StreamlitWebhookHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        global telegram_id
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        data = json.loads(post_data)
 
-@app.route('/update_telegram_id', methods=['POST'])
-def update_telegram_id():
-    global telegram_id
-    data = request.json
-    telegram_id = data['telegram_id']
-    print(f"Received Telegram ID: {telegram_id}")
-    return '', 200
+        if 'telegram_id' in data:
+            telegram_id = data['telegram_id']
+            print(f"Received Telegram ID: {telegram_id}")
+
+        self.send_response(200)
+        self.end_headers()
+
+def run_streamlit_server():
+    server_address = ('', 8501)  # Порт по умолчанию для Streamlit
+    httpd = HTTPServer(server_address, StreamlitWebhookHandler)
+    print('Starting Streamlit webhook server...')
+    httpd.serve_forever()
+
+# Запуск сервера в отдельном потоке
+threading.Thread(target=run_streamlit_server, daemon=True).start()
 
 # Streamlit интерфейс
 st.title("Telegram ID Display")
+
 if telegram_id:
     st.write(f"Telegram ID: {telegram_id}")
 else:
@@ -31,9 +40,6 @@ else:
 
 #bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
 #webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
-
-
-
 
 
 chart_data = pd.DataFrame(
