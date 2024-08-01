@@ -1,20 +1,34 @@
 import streamlit as st
-import requests
+from flask import Flask, request
+import threading
 
-st.title('Telegram ID')
+# Инициализация Flask приложения
+app = Flask(__name__)
 
-st.write('Ожидание Telegram ID...')
+# Хранение Telegram ID
+telegram_id = None
 
-@st.experimental_api
-def telegram_id(telegram_id):
-    st.write(f'Telegram ID: {telegram_id}')
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    global telegram_id
+    data = request.json
+    if 'message' in data:
+        telegram_id = data['message']['from']['id']
+    return '', 200
 
-def api_endpoint():
-    if st.experimental_get_query_params():
-        telegram_id = st.experimental_get_query_params()['telegram_id'][0]
-        telegram_id(telegram_id)
+def run_flask():
+    app.run(port=5000)
 
-api_endpoint()
+# Запуск Flask сервера в отдельном потоке
+threading.Thread(target=run_flask, daemon=True).start()
+
+# Streamlit интерфейс
+st.title("Telegram ID Display")
+
+if telegram_id:
+    st.write(f"Telegram ID: {telegram_id}")
+else:
+    st.write("Ожидание сообщения от Telegram...")
 
 
 #bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
