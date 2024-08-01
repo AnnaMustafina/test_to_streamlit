@@ -1,6 +1,7 @@
 import streamlit as st
 from flask import Flask, request
 import threading
+import json
 
 # Инициализация Flask приложения
 app = Flask(__name__)
@@ -29,6 +30,7 @@ if telegram_id:
     st.write(f"Telegram ID: {telegram_id}")
 else:
     st.write("Ожидание сообщения от Telegram...")
+
 
 
 #bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
