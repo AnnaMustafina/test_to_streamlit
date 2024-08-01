@@ -9,7 +9,7 @@ webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
 
 # Получение данных о Telegram ID
    def get_last_user_id():
-       response = requests.get('http://YOUR_STREAMLIT_APP_URL/last_user_id')
+       response = requests.get('https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app')
        if response.status_code == 200:
            return response.json()['user_id']
        else:
