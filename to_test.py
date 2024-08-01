@@ -7,20 +7,29 @@ import requests
 bot_token = "6647621334:AAG5CiIbxm07vSVV0XLuPFOgtRhdyClS1AE"
 webhook_url = "https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app"
 
-# Получение данных о Telegram ID
-def get_last_user_id():
-       response = requests.get('https://app-to-test-j3ojcxof7bphybygqqvkct.streamlit.app')
-       if response.status_code == 200:
-           return response.json()['user_id']
-       else:
-           return None
+# Функция для обновления Telegram ID
+def update_telegram_id(telegram_id):
+    st.session_state.last_telegram_id = telegram_id
 
-last_user_id = get_last_user_id()
-if last_user_id:
-   st.write("Последний Telegram ID: " + str(last_user_id))
-else:
-   st.write("Нет данных о Telegram ID")
-  
+# Обработка POST запроса от бота
+def handle_api_request():
+    if st.session_state.last_telegram_id:
+        st.write(f"Последний Telegram ID: {st.session_state.last_telegram_id}")
+    else:
+        st.write("Еще не было запросов от бота.")
+
+# Создание API точки для обновления Telegram ID
+@st.experimental_api(show_spinner=False)
+def api_update_telegram_id():
+    data = st.experimental_get_query_params()
+    if 'telegram_id' in data:
+        telegram_id = data['telegram_id'][0]
+        update_telegram_id(telegram_id)
+
+api_update_telegram_id()
+handle_api_request()
+
+
 #if id_now =='IU13488':
 #    st.write('Привет, пользователь', id_now)
 #else:
